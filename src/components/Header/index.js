@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Nav from 'components/Nav/index.js';
 
-class Dashboard extends Component { 
+class Header extends Component { 
   render() {
     return (
         <Nav />
@@ -10,4 +10,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Nav;
+export default Header;
