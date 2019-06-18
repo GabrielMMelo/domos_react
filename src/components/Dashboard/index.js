@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import axios from 'axios';
 
 import Node from 'components/Node/index.js';
 
@@ -17,7 +17,7 @@ class Dashboard extends Component {
 
     refreshList = () => {
         axios
-            .get("/node/")
+            .get("/api/v1/device/")
             .then(res => this.setState({ 
                 data: res.data
             }))
@@ -30,7 +30,7 @@ class Dashboard extends Component {
                 {this.state.data.map( (node) => {
                     return (
                         <div className="col-3" key={node.id}>
-                            <Node image={node.image} id={node.id} name={node.name} purpouse={node.purpouse} is_active={node.is_active} />
+                            <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.is_active} />
                         </div>
                     );
                 })}

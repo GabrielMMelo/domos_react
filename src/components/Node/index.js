@@ -48,7 +48,7 @@ class Node extends Component {
                 <CardBody className="shadow-sm">
                     <CardImg top width="100%" src={this.props.image} alt={this.props.name + " image"} />
                     <CardTitle><h2>{this.props.name}</h2></CardTitle>
-                    <CardSubtitle className="text-muted"><h5>{this.props.purpouse}</h5></CardSubtitle>
+                    <CardSubtitle className="text-muted"><h5>{this.props.type}</h5></CardSubtitle>
                     <CardText>State: <span>{this.state.is_active ? "On" : "Off"}</span></CardText>
                     <Button onClick={this.toggleState}>Toggle</Button>
                 </CardBody>
