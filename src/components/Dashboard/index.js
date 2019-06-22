@@ -30,7 +30,7 @@ class Dashboard extends Component {
                 {this.state.data.map( (node) => {
                     return (
                         <div className="col-3" key={node.id}>
-                            <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.is_active} />
+                            <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.state} />
                         </div>
                     );
                 })}

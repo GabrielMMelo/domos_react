@@ -3,17 +3,15 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 
-class Node extends Component { 
+class Node extends Component {
     constructor(props){
         super(props);
         this.state = {
             is_active: props.is_active,
         };
 
-
         this.nodeSocket = new WebSocket(
-            'ws://192.168.0.110:8000/ws/node/node_' +
-            props.id + '/');
+            'ws://192.168.0.110:8000/ws/device/' + props.id + '/');
 
         // Bind
         this.toggleState = this.toggleState.bind(this);
@@ -22,10 +20,11 @@ class Node extends Component {
     componentDidMount() {
         this.nodeSocket.onmessage = function(e) {
             let data = JSON.parse(e.data);
-            let message = data['message'];
-            this.setState( {is_active: message} );
+            let state = parseInt(data['state']);
+            //console.log("state", state);
+            this.setState( {is_active: state} );
         }.bind(this);
-        
+
         this.nodeSocket.onclose = function(e) {
             console.error('Node socket closed unexpectedly');
         };
@@ -33,10 +32,10 @@ class Node extends Component {
 
     toggleState() {
         this.setState({
-            is_active: !this.state.is_active
-            },  () =>  { 
+            is_active: this.state.is_active ? 0 : 1  // toggle
+            },  () =>  {
                 this.nodeSocket.send(JSON.stringify({
-                    'message': this.state.is_active
+                    'state': this.state.is_active
                 }));
             }
         );
