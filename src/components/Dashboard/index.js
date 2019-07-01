@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import cookie from 'react-cookies';
+
 import Node from 'components/Node/index.js';
 
 class Dashboard extends Component { 
@@ -8,16 +10,19 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             data: [],
+            token: '',
         };
     }
 
     componentDidMount() {
-        this.refreshList();
+        this.setState({ token: cookie.load('token') }, this.refreshList());
     }
 
     refreshList = () => {
+        console.log({ token: this.state.token});
         axios
-            .get("/api/v1/device/")
+            .get("/api/v1/device/", { headers: { Authorization: `Token ${cookie.load('token')}` } })
+            //.get("/api/v1/device/")
             .then(res => this.setState({ 
                 data: res.data
             }))

@@ -5,12 +5,13 @@ import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { store } from './store';
 
-import Home from 'containers/Home/index.js';
+//import Home from 'containers/Home/index.js';  // removed temporary
 import Login from 'containers/Login/index.js';
 import _404 from 'containers/404/index.js';
 
 
 
+//<Route path="/" exact={true} component={Home} />
 class App extends Component {
 
   render() {
@@ -18,9 +19,8 @@ class App extends Component {
       <div className="App">
           <BrowserRouter>
               <Switch>
-                  <Route path="/" exact={true} component={Home} />
-                  <Route path="/login" component={Login} />
-                  <Route path="*" exact={true} component={_404} />
+                <Route path="/" exact={true} component={Login} />
+                <Route path="*" exact={true} component={_404} />
               </Switch>
           </BrowserRouter>
       </div>
