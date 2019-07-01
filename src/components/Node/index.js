@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 
+const wsServerHost = '192.168.0.113:8000';
+
 class Node extends Component {
     constructor(props){
         super(props);
@@ -11,7 +13,7 @@ class Node extends Component {
         };
 
         this.nodeSocket = new WebSocket(
-            'ws://192.168.0.110:8000/ws/device/' + props.id + '/');
+            'ws://' + wsServerHost + '/ws/device/' + props.id + '/');
 
         // Bind
         this.toggleState = this.toggleState.bind(this);
@@ -30,6 +32,7 @@ class Node extends Component {
         };
     };
 
+    // TODO: change the statements order (i.e., first send the ws message and then check the response and update the state)
     toggleState() {
         this.setState({
             is_active: this.state.is_active ? 0 : 1  // toggle
@@ -41,11 +44,11 @@ class Node extends Component {
         );
     };
 
+    //<CardImg top width="100%" src={this.props.image} alt={this.props.name + " image"} />
     render() {
         return (
             <Card>
                 <CardBody className="shadow-sm">
-                    <CardImg top width="100%" src={this.props.image} alt={this.props.name + " image"} />
                     <CardTitle><h2>{this.props.name}</h2></CardTitle>
                     <CardSubtitle className="text-muted"><h5>{this.props.type}</h5></CardSubtitle>
                     <CardText>State: <span>{this.state.is_active ? "On" : "Off"}</span></CardText>
