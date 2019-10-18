@@ -32,7 +32,7 @@ class Dashboard extends Component {
     render() {
         return (
             <div className="row justify-content-center mt-4">
-                {this.state.data.map( (node) => {
+                {this.state.data.map((node) => {
                     return (
                         <div className="col-10" key={node.id}>
                             <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.state} />

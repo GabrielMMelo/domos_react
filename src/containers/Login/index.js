@@ -15,13 +15,14 @@ class Login extends Component {
     password: "",
   }
 
-  onSubmit = e => {
-    e.preventDefault();
-      let body = { username: this.state.username, password: this.state.password };
-      axios
-          .post("/api/v1/auth/login/", body )
-          .then(res => {this.setState({ 
-                data: res.data
+    onSubmit = e => {
+        e.preventDefault();
+        let body = { username: this.state.username, password: this.state.password };
+        axios
+            .post("/api/v1/auth/login/", body)
+            .then(res => {
+                this.setState({ 
+                    data: res.data
                 });
                 const expires = new Date();
                 expires.setDate(Date.now() + 1000 * 60 * 60 * 24 * 14);

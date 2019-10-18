@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 
-const wsServerHost = '192.168.0.113:8000';
+const wsServerHost = 'gabrielmelo.ddns.net:8081';
 
 class Node extends Component {
     constructor(props){
