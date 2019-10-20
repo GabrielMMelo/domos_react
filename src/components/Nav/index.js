@@ -26,7 +26,7 @@ class Nav extends Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static">
-                    <Toolbar>
+                    <Toolbar className={classes.nav}>
                         <IconButton edge="start" onClick={() => handlerSideBar(true)} className={classes.menuButton} color="inherit" aria-label="menu">
                             <MenuIcon />
                         </IconButton>
@@ -38,7 +38,7 @@ class Nav extends Component {
                             ?
                             <Typography>Seu nome</Typography>
                             :
-                            <Button color="inherit">Login</Button>
+                            <Button variant="contained">Login</Button>
                         }
                     </Toolbar>
                 </AppBar>
@@ -50,6 +50,10 @@ class Nav extends Component {
 const styles = {
     root: {
         flexGrow: 1,
+    },
+    nav: {
+        minHeight: '54px',
+        backgroundColor: 'cadetblue',
     },
     menuButton: {
         marginRight: '20px',
