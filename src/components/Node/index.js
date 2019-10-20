@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 
-import { Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
-
 import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography'
+
+import SettingsIcon from '@material-ui/icons/Settings';
+import { withStyles } from '@material-ui/core/Styles';
 
 const wsServerHost = 'gabrielmelo.ddns.net:8081';
 
@@ -58,8 +63,9 @@ class Node extends Component {
     render() {
 
         const { wsConnected } = this.state;
+        const { classes, name, type } = this.props;
 
-        return (
+            /*
             <Card>
                 <CardBody className="shadow-sm">
                     <CardTitle><h2>{this.props.name}</h2></CardTitle>
@@ -71,8 +77,88 @@ class Node extends Component {
                     </Box>
                 </CardBody>
             </Card>
+            */
+        return (
+            <Card className={classes.card}>
+                <CardContent>
+                            <Box display="flex" alignItems="center">
+                                <Box marginRight={1}>
+                                    <Typography variant="h5" component="h2">
+                                        {name}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography className={wsConnected ? classes.textGreen : classes.textRed} gutterBottom>
+                                        {wsConnected ? 'CONECTADO' : 'DESCONECTADO'}
+                                    </Typography>
+                                </Box>
+                                <Box flexGrow={2} align="right">
+                                    <SettingsIcon className={classes.settings}/>
+                                </Box>
+                            </Box>
+                            <Box align="left">
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    {type}
+                                </Typography>
+                            </Box>
+                </CardContent>
+                <CardActions>
+                    <Box display="flex" alignItems="center" align="center">
+                        <Box>
+                            <Switch
+                                    checked={this.state.is_active}
+                                    onChange={this.toggleState}
+                                    value="checkedB"
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                />
+                        </Box>
+                    </Box>
+                </CardActions>
+            </Card>
         );
     }
 }
 
-export default Node;
+const styles = {
+  card: {
+    minWidth: 275,
+    borderRadius: '6px',
+  },
+  textGreen: {
+    fontSize: '10px',
+    paddingLeft: '5px',
+    paddingRight: '5px',
+    backgroundColor: '#efefef',
+    color: '#0080009c',
+    fontWeight: 'bold',
+    borderRadius: '5px',
+    border: '1px solid #dfdfdf',
+  },
+  textRed: {
+    fontSize: '10px',
+    paddingLeft: '5px',
+    paddingRight: '5px',
+    backgroundColor: '#efefef',
+    color: '#ff2e2e70',
+    fontWeight: 'bold',
+    borderRadius: '5px',
+    border: '1px solid #dfdfdf',
+  },
+  settings: {
+      color: 'rgba(0, 0, 0, 0.64)',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+};
+
+export default withStyles(styles)(Node);
