@@ -105,12 +105,13 @@ class Node extends Component {
                 <CardActions>
                     <Box display="flex" alignItems="center" align="center">
                         <Box>
-                            <Switch
-                                    checked={this.state.is_active}
-                                    onChange={this.toggleState}
-                                    value="checkedB"
-                                    color="primary"
-                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                            <StyledSwitch
+                                checked={this.state.is_active}
+                                onChange={this.toggleState}
+                                className={classes.switch}
+                                value="checkedB"
+                                color="primary"
+                                inputProps={{ 'aria-label': 'primary checkbox' }}
                                 />
                         </Box>
                     </Box>
@@ -119,6 +120,14 @@ class Node extends Component {
         );
     }
 }
+const StyledSwitch = withStyles({
+    checked: {
+        color: 'cadetblue !important',
+    },
+    track: {
+        backgroundColor: 'cadetblue !important',
+    }
+})(Switch);
 
 const styles = {
   card: {
