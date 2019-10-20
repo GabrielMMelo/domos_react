@@ -19,44 +19,42 @@ class Node extends Component {
         this.nodeSocket = new WebSocket(
             'ws://' + wsServerHost + '/ws/device/' + props.id + '/'
         );
-
-        //TODO: fire a message through ws connection to authorize
-
-        this.setState({ wsConnected: true });
-
-        // Bind
-        this.toggleState = this.toggleState.bind(this);
     }
 
     componentDidMount() {
         const { wsConnected } = this.state;
 
-        this.nodeSocket.onmessage = function(e) {
+        this.nodeSocket.onmessage = (e) => {
             let data = JSON.parse(e.data);
             let state = parseInt(data['state']);
-            //console.log("state", state);
             this.setState( {is_active: state} );
-        }.bind(this);
+        };
 
-        this.nodeSocket.onclose = function(e) {
+        this.nodeSocket.onopen = () => {
+            this.nodeSocket.send(JSON.stringify({
+                'state': this.state.is_active,
+                "token": "9255403bade0f26116679feedb87271e52d7dfff",
+            }));
+            this.setState({ wsConnected: true });
+        }
+
+        this.nodeSocket.onclose = (e) => {
             this.setState({ wsConnected: false });
             console.error('Node socket closed unexpectedly');
         };
     };
 
-    // TODO: change the statements order (i.e., first send the ws message and then check the response and update the state)
-    toggleState() {
+    toggleState = () => {
         this.setState({
             is_active: this.state.is_active ? 0 : 1  // toggle
             },  () =>  {
                 this.nodeSocket.send(JSON.stringify({
-                    'state': this.state.is_active
+                    'state': this.state.is_active,
                 }));
             }
         );
     };
 
-    //<CardImg top width="100%" src={this.props.image} alt={this.props.name + " image"} />
     render() {
 
         const { wsConnected } = this.state;
@@ -69,7 +67,7 @@ class Node extends Component {
                     <CardText>State: <span>{this.state.is_active ? "On" : "Off"}</span></CardText>
                     <Button onClick={this.toggleState}>Toggle</Button>
                     <Box align="right">
-                        <Typography onClick={this.toggleState}>Toggle</Typography>
+                        <Typography>{ wsConnected ? 'Conectado' : 'Desconectado'}</Typography>
                     </Box>
                 </CardBody>
             </Card>
