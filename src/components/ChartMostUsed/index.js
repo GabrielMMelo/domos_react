@@ -18,6 +18,13 @@ class ChartMostUsed extends Component {
 
         this.state = {
             options: {
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '40%',
+                        }
+                    },
+                },
                 responsive: [{
                     breakpoint: 480,
                     options: {
@@ -59,7 +66,7 @@ class ChartMostUsed extends Component {
                         Dispositivos mais usados
                     </Typography>
                 </Box>
-                <Chart options={this.state.options} series={this.state.series} type="donut" width={'100%'} height={320} />
+                <Chart options={this.state.options} series={this.state.series} type="donut" width={'100%'} height={200} />
             </Paper>
         )
     }

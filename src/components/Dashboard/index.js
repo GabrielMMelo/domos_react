@@ -72,7 +72,7 @@ class Dashboard extends Component {
                                     )
                             })}
                             <Box align="center">
-                                <Button variant="outlined">
+                                <Button className={classes.btn} variant="outlined">
                                     VER TODOS
                                 </Button>
                             </Box>
@@ -85,7 +85,7 @@ class Dashboard extends Component {
 
 const styles = {
     container: {
-        marginTop: '50px',
+        marginTop: '30px',
 
     },
     paper: {
@@ -93,7 +93,19 @@ const styles = {
         boxShadow: 'inset 0px 0px 7px -4px rgba(0,0,0,0.75)',
     },
     charts: {
-        padding: '20px',
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+    },
+    btn: {
+        color: '#f4f4f4',
+        backgroundColor: 'cadetblue',
+        border: 'none',
+        '&:hover': {
+            backgroundColor: '#508486',
+        }
+
     },
     nodes: {
         padding: '20px',
