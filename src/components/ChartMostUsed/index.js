@@ -12,6 +12,8 @@ import { withStyles } from '@material-ui/core/Styles';
 import { Typography } from '@material-ui/core';
 import { generateKeyPair } from 'crypto';
 
+import api from '../../services/api';
+
 class ChartMostUsed extends Component { 
     constructor(props) {
         super(props);
@@ -47,8 +49,8 @@ class ChartMostUsed extends Component {
 
     refreshList = () => {
         console.log({ token: this.state.token});
-        axios
-            .get("/api/v1/device/", { headers: { Authorization: `Token ${cookie.load('token')}` } })
+        api
+            .get("device/", { headers: { Authorization: `Token ${cookie.load('token')}` } })
             .then(res => this.setState({ 
                 data: res.data
             }))

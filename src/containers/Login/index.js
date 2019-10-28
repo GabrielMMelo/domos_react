@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import cookie from 'react-cookies';
 
 import axios from 'axios';
+import api from '../../services/api';
 
 import Home from 'containers/Home/index.js';
 
@@ -18,8 +19,8 @@ class Login extends Component {
     onSubmit = e => {
         e.preventDefault();
         let body = { username: this.state.username, password: this.state.password };
-        axios
-            .post("/api/v1/auth/login/", body)
+        api
+            .post("auth/login/", body)
             .then(res => {
                 this.setState({ 
                     data: res.data

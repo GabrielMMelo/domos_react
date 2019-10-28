@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core/Styles';
 
+import wsHost from '../../services/ws';
+
 const wsServerHost = 'gabrielmelo.ddns.net:8081';
 
 class Node extends Component {
@@ -22,7 +24,7 @@ class Node extends Component {
         };
 
         this.nodeSocket = new WebSocket(
-            'ws://' + wsServerHost + '/ws/device/' + props.id + '/'
+            wsHost + `device/${props.id}/`
         );
     }
 
@@ -31,14 +33,14 @@ class Node extends Component {
 
         this.nodeSocket.onmessage = (e) => {
             let data = JSON.parse(e.data);
-            let state = parseInt(data['state']);
-            this.setState( {is_active: state} );
+            let state = parseInt(Number(data['state']));
+            this.setState({is_active: state});
         };
 
         this.nodeSocket.onopen = () => {
             this.nodeSocket.send(JSON.stringify({
-                'state': this.state.is_active,
-                "token": "9255403bade0f26116679feedb87271e52d7dfff",
+                'state': this.props.is_active,
+                "token": "20d6cd6d4be0b8a5ae69f4f3b6f8cc81e1b8b16e",
             }));
             this.setState({ wsConnected: true });
         }
