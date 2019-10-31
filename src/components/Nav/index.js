@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/Styles'
 
+import textLogo from '../../assets/img/textLogo.png'
 
-// TODO: aplicar redux to get token/user
 class Nav extends Component { 
     constructor(props) {
         super(props);
 
         this.state = {
-
         }
     }
 
     render() {
-
         const { classes, handlerSideBar } = this.props;
 
         return (
@@ -30,16 +27,9 @@ class Nav extends Component {
                         <IconButton edge="start" onClick={() => handlerSideBar(true)} className={classes.menuButton} color="inherit" aria-label="menu">
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            DOMOS
-                        </Typography>
-                        {
-                            this.state.token
-                            ?
-                            <Typography>Seu nome</Typography>
-                            :
-                            <Button variant="contained">Login</Button>
-                        }
+                        <Box justifyContent='center' flexGrow={1}>
+                            <img className={classes.textLogo} src={textLogo} alt="Domos' text logo"/>
+                        </Box>
                     </Toolbar>
                 </AppBar>
             </div>
@@ -53,13 +43,14 @@ const styles = {
     },
     nav: {
         minHeight: '54px',
-        backgroundColor: 'cadetblue',
+        backgroundColor: '#315151',
     },
     menuButton: {
         marginRight: '20px',
     },
-    title: {
-        flexGrow: 1,
+    textLogo: {
+        height: '35px',
+        width: 'auto',
     },
 }
 
