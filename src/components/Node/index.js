@@ -27,8 +27,6 @@ class Node extends Component {
     }
 
     componentDidMount() {
-        const { wsConnected } = this.state;
-
         this.nodeSocket.onmessage = (e) => {
             let data = JSON.parse(e.data);
             let state = parseInt(Number(data['state']));
