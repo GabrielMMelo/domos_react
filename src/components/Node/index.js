@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,9 +10,8 @@ import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core/Styles';
 
+import { getToken } from '../../auth/authenticator';
 import wsHost from '../../services/ws';
-
-const wsServerHost = 'gabrielmelo.ddns.net:8081';
 
 class Node extends Component {
     constructor(props){
@@ -40,7 +38,7 @@ class Node extends Component {
         this.nodeSocket.onopen = () => {
             this.nodeSocket.send(JSON.stringify({
                 'state': this.props.is_active,
-                "token": "20d6cd6d4be0b8a5ae69f4f3b6f8cc81e1b8b16e",
+                "token": getToken(),
             }));
             this.setState({ wsConnected: true });
         }

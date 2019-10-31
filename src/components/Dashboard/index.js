@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
-import cookie from 'react-cookies';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/Styles';
 
 import Node from 'components/Node/index.js';
 import ChartMostUsed from 'components/ChartMostUsed';
+import api from '../../services/api';
+import { getToken } from '../../auth/authenticator';
 
 class Dashboard extends Component { 
     constructor(props){
         super(props);
         this.state = {
             data: [],
-            token: '',
         };
     }
 
     componentDidMount() {
-        this.setState({ token: cookie.load('token') }, this.refreshList());
+        this.getDevices();
     }
 
-    refreshList = () => {
-        console.log({ token: this.state.token});
-        axios
-            .get("/api/v1/device/", { headers: { Authorization: `Token ${cookie.load('token')}` } })
-            .then(res => this.setState({ 
-                data: res.data
-            }))
+    getDevices = () => {
+        api.get("device/", { headers: { Authorization: `Token ${getToken()}` } })
+            .then(res => {
+                this.setState({ 
+                    data: res.data
+                });
+            })
             .catch(err => console.log(err));
     };
 
@@ -64,12 +60,13 @@ class Dashboard extends Component {
                         </Box>
                         <Box className={classes.nodes}>
                             {this.state.data.map((node, idx) => {
-                                if (idx < 2)
+                                if (idx < 2) {
                                     return (
                                         <div className={classes.node} key={idx}>
                                             <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.state} />
                                         </div>
                                     )
+                                }
                             })}
                             <Box align="center">
                                 <Button className={classes.btn} variant="outlined">

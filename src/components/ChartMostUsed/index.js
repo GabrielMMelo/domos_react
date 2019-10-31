@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import cookie from 'react-cookies';
 
 import Chart from 'react-apexcharts';
 
 import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/Styles';
 
@@ -13,6 +10,7 @@ import { Typography } from '@material-ui/core';
 import { generateKeyPair } from 'crypto';
 
 import api from '../../services/api';
+import { getToken } from '../../auth/authenticator';
 
 class ChartMostUsed extends Component { 
     constructor(props) {
@@ -43,17 +41,15 @@ class ChartMostUsed extends Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({ token: cookie.load('token') }, this.refreshList());
-    }
-
     refreshList = () => {
         console.log({ token: this.state.token});
         api
-            .get("device/", { headers: { Authorization: `Token ${cookie.load('token')}` } })
-            .then(res => this.setState({ 
-                data: res.data
-            }))
+            .get("device/", { headers: { Authorization: `Token ${getToken()}` } })
+            .then(res => {
+                this.setState({ 
+                    data: res.data
+                });
+            })
             .catch(err => console.log(err));
     };
 
