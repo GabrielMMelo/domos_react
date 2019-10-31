@@ -18,6 +18,7 @@ class App extends Component {
           <BrowserRouter>
               <Switch>
                 <Route path="/" exact={true} render={() => isAuthenticated() ? <Home/> : <Login/>} />
+                <Route path="/login" exact={true} component={Login}/>
                 <Route path="*" exact={true} component={_404} />
               </Switch>
           </BrowserRouter>
