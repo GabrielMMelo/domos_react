@@ -12,16 +12,16 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            username: "",
+            email: "",
             password: "",
             wrongCredentials: false,
         }
     }
 
     onLogin = async () => {
-        const { username, password } = this.state;
+        const { email, password } = this.state;
         try {
-            await login(username, password);
+            await login(email, password);
         }
         catch(e) {
             this.setState({ wrongCredentials: true})
@@ -48,8 +48,9 @@ class Login extends Component {
                                 <CustomTextField
                                     className={ classes.textField }
                                     variant="outlined"
-                                    onChange={(e) => this.setState({ username: e.target.value }) }
-                                    placeholder="Usuário"
+                                    type="email"
+                                    onChange={(e) => this.setState({ email: e.target.value }) }
+                                    placeholder="E-mail"
                                 />
                                 <CustomTextField
                                     className={ classes.textField }
@@ -62,7 +63,7 @@ class Login extends Component {
                                 wrongCredentials
                                 ?
                                 <Box className={classes.wrongCredentials} justifyContent='center'>
-                                    <Typography className={classes.wrongCredentialsText}>Usuário e/ou senha incorreto(s)</Typography>
+                                    <Typography className={classes.wrongCredentialsText}>E-mail e/ou senha incorreto(s)</Typography>
                                 </Box>
                                 :
                                 <></>

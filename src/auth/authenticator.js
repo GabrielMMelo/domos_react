@@ -2,9 +2,9 @@ import cookie from 'react-cookies';
 
 import api from '../services/api';
 
-export const login = async (username, password) => {
+export const login = async (email, password) => {
     const body = {
-        username,
+        email,
         password
     }
 
