@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Box, Button, Paper, Card, TextField, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/Styles'
 
-import { login, isAuthenticated } from '../../auth/authenticator';
+import { login, isAuthenticated, getUserInfo } from '../../auth/authenticator';
 import fullLogo from '../../assets/img/fullLogo.png';
 
 class Login extends Component {
@@ -18,10 +18,12 @@ class Login extends Component {
         }
     }
 
-    onLogin = async () => {
+    onLogin = async (e) => {
+        e.preventDefault();
         const { email, password } = this.state;
         try {
             await login(email, password);
+            await getUserInfo();
         }
         catch(e) {
             this.setState({ wrongCredentials: true})
@@ -41,6 +43,7 @@ class Login extends Component {
                 <Box alignContent="center" justifyContent='center' className={ classes.background }>
                     <Box justifyContent='center' className={ classes.container }>
                         <Paper className={ classes.paper }>
+                            <form onSubmit={this.onLogin}>
                             <Box>
                                 <img className={classes.fullLogo} src={fullLogo} alt="Domos' full logo" />
                             </Box>
@@ -70,8 +73,9 @@ class Login extends Component {
                                 }
                             </Box>
                             <Box marginTop={2}>
-                                <CustomButton variant="contained" className={classes.button} onClick={this.onLogin}>Login</CustomButton>
+                                <CustomButton variant="contained" className={classes.button} type="submit">Login</CustomButton>
                             </Box>
+                            </form>
                         </Paper>
                     </Box>
                 </Box>
