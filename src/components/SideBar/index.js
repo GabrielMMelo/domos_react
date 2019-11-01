@@ -22,7 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { logout } from '../../auth/authenticator';
+import { logout, getFirstName } from '../../auth/authenticator';
 import fullLogo from '../../assets/img/fullLogo.png'
 
 class SideBar extends Component { 
@@ -31,7 +31,13 @@ class SideBar extends Component {
 
         this.state = {
             isLoggingOut: false,
+            firstName: '',
         }
+    }
+
+    componentDidMount() {
+        const firstName = getFirstName();
+        this.setState({firstName});
     }
 
     onLogout = async () => {
@@ -40,14 +46,13 @@ class SideBar extends Component {
     }
 
     render() {
-        const { isLoggingOut } = this.state;
+        const { isLoggingOut, firstName } = this.state;
         const { classes, handlerSideBar, opened } = this.props;
 
         if (isLoggingOut) {
             return <Redirect to="/" push={true}/>;
         }
 
-        const name = "Gabriel";
         return (
             <Drawer
                 className={classes.drawer}
@@ -73,10 +78,10 @@ class SideBar extends Component {
                         </Box>
                     </Box>
                     <Box display='flex' justifyContent='center'>
-                        <Avatar className={classes.avatar}>{name.slice(0,1)}</Avatar>
+                        <Avatar className={classes.avatar}>{firstName.slice(0,1)}</Avatar>
                     </Box>
                     <Box display='flex' marginBottom={1} justifyContent="center" alignItems="center">
-                        <Typography className={classes.userTitle} variant="h4">Gabriel</Typography>
+                        <Typography className={classes.userTitle} variant="h4">{firstName}</Typography>
                     </Box>
                     <Box display='flex' marginBottom={5} justifyContent="center" alignItems="center">
                         <Fab
