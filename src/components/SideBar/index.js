@@ -152,13 +152,14 @@ const styles = {
     avatar: {
         margin: '10px',
         marginBottom: '0px',
+        backgroundColor: 'cadetblue',
     },
     logoutButton: {
-        backgroundColor: '#ff8686',
+        backgroundColor: '#ef7676',
         fontSize: '10px',
         height: '19px !important',
         '&:hover': {
-            backgroundColor: '#ef7676',
+            backgroundColor: '#Df6666',
             borderColor: '#0062cc',
         },
     },
