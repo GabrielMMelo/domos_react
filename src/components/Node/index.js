@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography'
 
 import SettingsIcon from '@material-ui/icons/Settings';
-import { withStyles } from '@material-ui/core/Styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { getToken } from '../../auth/authenticator';
 import wsHost from '../../services/ws';

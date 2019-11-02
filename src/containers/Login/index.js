@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { Redirect } from 'react-router-dom';
 
 import { Box, Button, Paper, Card, TextField, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/Styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import { login, isAuthenticated, getUserInfo } from '../../auth/authenticator';
 import fullLogo from '../../assets/img/fullLogo.png';

@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/Styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Typography } from '@material-ui/core';
 import { generateKeyPair } from 'crypto';
