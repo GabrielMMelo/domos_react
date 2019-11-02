@@ -27,8 +27,8 @@ export const login = async (email, password) => {
         })
 };
 
-export const getUserInfo = () => {
-    api.get("auth/user/", { headers: { Authorization: `Token ${getToken()}` } }) 
+export const getUserInfo = async () => {
+    await api.get("auth/user/", { headers: { Authorization: `Token ${getToken()}` } }) 
         .then((res) => {
             const expires = new Date();
             expires.setDate(Date.now() + 1000 * 60 * 60 * 24 * 14);
