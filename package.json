@@ -2,9 +2,9 @@
   "name": "front_end",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:8080",
+  "proxy": "https://domos.icu",
   "dependencies": {
-    "@material-ui/core": "^4.5.1",
+    "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
     "aes-js": "^3.1.2",
     "apexcharts": "^3.10.0",
@@ -17,7 +17,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.2.0",
     "reactstrap": "^7.1.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "serve": "^11.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
