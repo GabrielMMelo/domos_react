@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Timer from 'easytimer.js';
 
 import Box from '@material-ui/core/Box'
 import Card from '@material-ui/core/Card';
@@ -17,8 +18,10 @@ class Node extends Component {
     constructor(props){
         super(props);
         this.state = {
-            is_active: props.is_active,
+            isActive: props.is_active,
             wsConnected: false,
+            timer: new Timer(),
+            uptime: '',
         };
 
         this.nodeSocket = new WebSocket(
@@ -27,15 +30,26 @@ class Node extends Component {
     }
 
     componentDidMount() {
+        const { timer } = this.state;
+        const { updatedAt } = this.props;
+        let difference = new Date() - new Date(updatedAt);
+        timer.start({
+            startValues: {
+                seconds: difference/1000,  // milliseconds to seconds
+            },
+        });
+        timer.addEventListener("secondsUpdated", this.tick);
+
         this.nodeSocket.onmessage = (e) => {
             let data = JSON.parse(e.data);
             let state = parseInt(Number(data['state']));
-            this.setState({is_active: state});
+            this.resetTimer();
+            this.setState({isActive: state});
         };
 
         this.nodeSocket.onopen = () => {
             this.nodeSocket.send(JSON.stringify({
-                'state': this.props.is_active,
+                'state': this.props.isActive,
                 "token": getToken(),
             }));
             this.setState({ wsConnected: true });
@@ -48,83 +62,127 @@ class Node extends Component {
     };
 
     toggleState = () => {
+        this.resetTimer();
+
         this.setState({
-            is_active: this.state.is_active ? 0 : 1  // toggle
+            isActive: this.state.isActive ? 0 : 1,
             },  () =>  {
                 this.nodeSocket.send(JSON.stringify({
-                    'state': this.state.is_active,
+                    'state': this.state.isActive,
                 }));
             }
         );
     };
 
+    tick = () => {
+        let { timer } = this.state;
+        const uptime = timer.getTimeValues().toString();
+        this.setState({ uptime });
+    }
+
+    resetTimer = () => {
+        this.setState({ timer: null });  // destroy current timer (is there any better approach?)
+        let timer = new Timer();
+        timer.start();
+        this.setState({ timer, uptime: '' });
+    }
+
     render() {
 
-        const { wsConnected } = this.state;
+        const { wsConnected, isActive, uptime } = this.state;
         const { classes, name, type } = this.props;
 
-            /*
-            <Card>
-                <CardBody className="shadow-sm">
-                    <CardTitle><h2>{this.props.name}</h2></CardTitle>
-                    <CardSubtitle className="text-muted"><h5>{this.props.type}</h5></CardSubtitle>
-                    <CardText>State: <span>{this.state.is_active ? "On" : "Off"}</span></CardText>
-                    <Button onClick={this.toggleState}>Toggle</Button>
-                    <Box align="right">
-                        <Typography>{ wsConnected ? 'Conectado' : 'Desconectado'}</Typography>
-                    </Box>
-                </CardBody>
-            </Card>
-            */
         return (
             <Card className={classes.card}>
                 <CardContent>
-                            <Box display="flex" alignItems="center">
-                                <Box marginRight={1}>
-                                    <Typography variant="h5" component="h2">
-                                        {name}
-                                    </Typography>
-                                </Box>
-                                <Box>
-                                    <Typography className={wsConnected ? classes.textGreen : classes.textRed} gutterBottom>
-                                        {wsConnected ? 'CONECTADO' : 'DESCONECTADO'}
-                                    </Typography>
-                                </Box>
-                                <Box flexGrow={2} align="right">
-                                    <SettingsIcon className={classes.settings}/>
-                                </Box>
-                            </Box>
-                            <Box align="left">
-                                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                    {type}
-                                </Typography>
-                            </Box>
-                </CardContent>
-                <CardActions>
-                    <Box display="flex" alignItems="center" align="center">
+                    <Box display="flex" alignItems="center">
+                        <Box marginRight={1}>
+                            <Typography variant="h5" component="h2">
+                                {name}
+                            </Typography>
+                        </Box>
                         <Box>
-                            <StyledSwitch
-                                checked={this.state.is_active}
-                                onChange={this.toggleState}
-                                className={classes.switch}
-                                value="checkedB"
-                                color="primary"
-                                inputProps={{ 'aria-label': 'primary checkbox' }}
-                                />
+                            <Typography className={wsConnected ? classes.textGreen : classes.textRed} gutterBottom>
+                                {wsConnected ? 'CONECTADO' : 'DESCONECTADO'}
+                            </Typography>
+                        </Box>
+                        <Box flexGrow={2} align="right">
+                            <SettingsIcon className={classes.settings}/>
                         </Box>
                     </Box>
+                    <Box align="left">
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            {type}
+                        </Typography>
+                    </Box>
+                </CardContent>
+                <CardActions>
+                    <Box display="flex" alignItems="center" align="center" margin={1}>
+                        <Typography className={classes.onOff} style={{ color: (isActive ? '#D1D1D1' : '#555')}}>
+                            Off
+                        </Typography>
+                        <StyledSwitch
+                            checked={isActive}
+                            onChange={this.toggleState}
+                            className={classes.switch}
+                            value="checkedB"
+                            color="primary"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                            />
+                        <Typography className={classes.onOff} style={{ color: (isActive ? '#555' : '#D1D1D1')}}>
+                            On
+                        </Typography>
+                    </Box>
+                    <Box flexGrow={1}/>
+                    {
+                    isActive && uptime
+                    ?
+                    <Typography className={classes.uptime}>
+                        <Box style={{fontSize: '18px'}} component='span'>UPTIME:</Box> {uptime}
+                    </Typography>
+                    :
+                    <></>
+                    }
                 </CardActions>
             </Card>
         );
     }
 }
 const StyledSwitch = withStyles({
-    checked: {
-        color: 'cadetblue !important',
+    root: {
+        width: 42,
+        height: 26,
+        padding: 0,
+        margin: '5px',
+    },
+    switchBase: {
+        padding: 1,
+        '&$checked': {
+            transform: 'translateX(16px)',
+            color: 'white',
+            '& + $track': {
+                backgroundColor: 'cadetblue',
+                opacity: 1,
+                border: 'none',
+            },
+        },
+    },
+    thumb: {
+        width: 24,
+        height: 24,
     },
     track: {
-        backgroundColor: 'cadetblue !important',
-    }
+        borderRadius: 26 / 2,
+        border: `1px solid #D1D1D1`,
+        backgroundColor: '#E1E1E1',
+        opacity: 1,
+        transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        '& .Mui-checked': {
+            backgroundColor: 'cadetblue !important',
+        }
+    },
+    checked: {
+    },
 })(Switch);
 
 const styles = {
@@ -166,6 +224,19 @@ const styles = {
   pos: {
     marginBottom: 12,
   },
+  onOff: {
+      fontVariant: 'all-small-caps',
+      fontSize: '15px',
+      fontWeight: 'bold',
+      marginBottom: '2px',
+  },
+  uptime: {
+      fontSize: '25px',
+      fontStyle: 'italic',
+      fontVariant: 'all-small-caps',
+      color: '#D1D1D1',
+      marginRight: '10px',
+  }
 };
 
 export default withStyles(styles)(Node);

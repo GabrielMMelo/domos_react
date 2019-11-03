@@ -63,7 +63,7 @@ class Dashboard extends Component {
                                 if (idx < 2) {
                                     return (
                                         <div className={classes.node} key={idx}>
-                                            <Node image={node.image} id={node.id} name={node.name} type={node.type} is_active={node.state} />
+                                            <Node id={node.id} name={node.name} type={node.type} is_active={node.state} updatedAt={node.updated_at}/>
                                         </div>
                                     )
                                 }
