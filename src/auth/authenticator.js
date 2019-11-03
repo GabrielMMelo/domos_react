@@ -22,7 +22,7 @@ export const login = async (email, password) => {
                 path: '/',
                 expires,
                 //httpOnly: true,
-                //secure: true,
+                secure: true,
             });
         })
 };
@@ -36,7 +36,7 @@ export const getUserInfo = async () => {
                 path: '/',
                 expires,
                 //httpOnly: true,
-                //secure: true,
+                secure: true,
             })
         });
 }
