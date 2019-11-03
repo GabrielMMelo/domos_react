@@ -3,8 +3,11 @@ import React, { Component } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 import Node from 'components/Node/index.js';
 import ChartMostUsed from 'components/ChartMostUsed';
@@ -39,24 +42,36 @@ class Dashboard extends Component {
 
         return (
             <Grid className={classes.container} container justify="center" spacing={3}>
-                <Grid item xs={4}>
-                    <Box align="left">
+                <Grid item xs={6}>
+                    <Box display='flex' align="left" marginRight={2.5}>
                         <Typography variant="h5" className={classes.subtitle}>
                             Estatísticas de uso
                         </Typography>
+                        <Box flexGrow={1}/>
+                        <Button className={classes.btn} variant="outlined">
+                            VER TODAS
+                            <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
+                        </Button>
                     </Box>
-                    <Box className={classes.charts}>
-                        <ChartMostUsed />
-                    </Box>
-                    <Box className={classes.charts}>
-                        <ChartMostUsed />
+                    <Box display='flex'>
+                        <Box className={classes.charts}>
+                            <ChartMostUsed />
+                        </Box>
+                        <Box className={classes.charts}>
+                            <ChartMostUsed />
+                        </Box>
                     </Box>
                 </Grid>
                 <Grid item xs={5}>
-                        <Box align="left">
+                        <Box display="flex" align="left" marginRight={2.5}>
                             <Typography variant="h5" className={classes.subtitle}>
                                 Principais dispositivos
                             </Typography>
+                            <Box flexGrow={1}/>
+                            <Button className={classes.btn} variant="outlined">
+                                VER TODOS
+                                <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
+                            </Button>
                         </Box>
                         <Box className={classes.nodes}>
                             {this.state.data.map((node, idx) => {
@@ -68,12 +83,23 @@ class Dashboard extends Component {
                                     )
                                 }
                             })}
-                            <Box align="center">
-                                <Button className={classes.btn} variant="outlined">
-                                    VER TODOS
-                                </Button>
-                            </Box>
                         </Box>
+                </Grid>
+                <Grid item xs={11}>
+                    <Box align="left">
+                        <Typography variant="h5" className={classes.subtitle}>
+                            Automações
+                        </Typography>
+                    </Box>
+                    <Box display='flex'>
+                        <Box className={classes.charts}>
+                            <Paper style={{padding: '10px'}}>
+                                <Typography style={{color: '#A1A1A1', fontStyle: 'italic'}}>
+                                    EM BREVE...
+                                </Typography>
+                            </Paper>
+                        </Box>
+                    </Box>
                 </Grid>
             </Grid>
         );
@@ -92,11 +118,12 @@ const styles = {
     charts: {
         paddingTop: '10px',
         paddingBottom: '10px',
-        paddingLeft: '20px',
         paddingRight: '20px',
     },
     btn: {
         color: '#f4f4f4',
+        //borderRadius: '25px',
+        fontSize: '10px',
         backgroundColor: 'cadetblue',
         border: 'none',
         '&:hover': {
@@ -105,7 +132,9 @@ const styles = {
 
     },
     nodes: {
-        padding: '20px',
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        paddingRight: '20px',
     },
     node: {
         marginBottom: '30px',
@@ -114,6 +143,11 @@ const styles = {
         fontVariant: 'all-small-caps',
         fontWeight: 'bold',
         color: '#363636',
+    },
+    arrowForwardIcon: {
+        fontSize: '12px',
+        marginRight: '0px',
+        marginLeft: '6px',
     }
 };
 
