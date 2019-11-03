@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box'
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography'
 
@@ -107,7 +108,9 @@ class Node extends Component {
                             </Typography>
                         </Box>
                         <Box flexGrow={2} align="right">
-                            <SettingsIcon className={classes.settings}/>
+                            <IconButton style={{padding: '0px'}}>
+                                <SettingsIcon className={classes.settingsIcon}/>
+                            </IconButton>
                         </Box>
                     </Box>
                     <Box align="left">
@@ -210,7 +213,7 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #dfdfdf',
   },
-  settings: {
+  settingsIcon: {
       color: 'rgba(0, 0, 0, 0.64)',
   },
   bullet: {
