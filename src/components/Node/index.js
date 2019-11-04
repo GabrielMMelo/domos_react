@@ -20,6 +20,7 @@ class Node extends Component {
         super(props);
         this.state = {
             isActive: props.is_active,
+            nodeConnected: props.nodeConnected,
             wsConnected: false,
             timer: new Timer(),
             uptime: '',
@@ -43,9 +44,14 @@ class Node extends Component {
 
         this.nodeSocket.onmessage = (e) => {
             let data = JSON.parse(e.data);
-            let state = parseInt(Number(data['state']));
-            this.resetTimer();
-            this.setState({isActive: state});
+            if (data['state'] !== undefined) {
+                let state = parseInt(Number(data['state']));
+                this.resetTimer();
+                this.setState({isActive: state});
+            }
+            if (data['node_connected'] !== undefined){
+                this.setState({ nodeConnected: data['node_connected']})
+            }
         };
 
         this.nodeSocket.onopen = () => {
@@ -90,7 +96,7 @@ class Node extends Component {
 
     render() {
 
-        const { wsConnected, isActive, uptime } = this.state;
+        const { wsConnected, nodeConnected, isActive, uptime } = this.state;
         const { classes, name, type } = this.props;
 
         return (
@@ -102,9 +108,12 @@ class Node extends Component {
                                 {name}
                             </Typography>
                         </Box>
-                        <Box>
+                        <Box display="flex">
                             <Typography className={wsConnected ? classes.textGreen : classes.textRed} gutterBottom>
-                                {wsConnected ? 'CONECTADO' : 'DESCONECTADO'}
+                                {wsConnected ? 'WS CONECTADO' : 'WS DESCONECTADO'}
+                            </Typography>
+                            <Typography className={nodeConnected ? classes.textGreen : classes.textRed} gutterBottom>
+                                {nodeConnected ? 'NODE CONECTADO' : 'NODE DESCONECTADO'}
                             </Typography>
                         </Box>
                         <Box flexGrow={2} align="right">
@@ -202,6 +211,7 @@ const styles = {
     fontWeight: 'bold',
     borderRadius: '5px',
     border: '1px solid #dfdfdf',
+    marginRight: '10px',
   },
   textRed: {
     fontSize: '10px',
@@ -212,9 +222,10 @@ const styles = {
     fontWeight: 'bold',
     borderRadius: '5px',
     border: '1px solid #dfdfdf',
+    marginRight: '10px',
   },
   settingsIcon: {
-      color: 'rgba(0, 0, 0, 0.64)',
+      color: 'rgba(0, 0, 0, 0.44)',
   },
   bullet: {
     display: 'inline-block',
