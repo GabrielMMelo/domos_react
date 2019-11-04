@@ -43,62 +43,71 @@ class Dashboard extends Component {
         return (
             <Grid className={classes.container} container justify="center" spacing={3}>
                 <Grid item xs={6}>
-                    <Box display='flex' align="left" marginRight={2.5}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Box display='flex' align="left" marginRight={2.5}>
+                                <Typography variant="h5" className={classes.subtitle}>
+                                    Estatísticas de uso
+                                </Typography>
+                                <Box flexGrow={1}/>
+                                <Button className={classes.btn} variant="outlined">
+                                    VER TODAS
+                                    <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
+                                </Button>
+                            </Box>
+                            <Box display='flex'>
+                                <Box className={classes.charts}>
+                                    <ChartMostUsed />
+                                </Box>
+                                <Box className={classes.charts}>
+                                    <ChartMostUsed />
+                                </Box>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box display='flex' marginTop={3} align="left" marginRight={2.5}>
+                                <Typography variant="h5" className={classes.subtitle}>
+                                    Automações
+                                </Typography>
+                                <Box flexGrow={1}/>
+                                <Button className={classes.btn} variant="outlined">
+                                    VER TODAS
+                                    <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
+                                </Button>
+                            </Box>
+                            <Box display='flex'>
+                                <Box flexGrow={1} className={classes.charts}>
+                                    <Paper style={{padding: '10px'}}>
+                                        <Typography style={{color: '#A1A1A1', fontStyle: 'italic'}}>
+                                            EM BREVE...
+                                        </Typography>
+                                    </Paper>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={5}>
+                    <Box display="flex" align="left" marginRight={2.5}>
                         <Typography variant="h5" className={classes.subtitle}>
-                            Estatísticas de uso
+                            Principais dispositivos
                         </Typography>
                         <Box flexGrow={1}/>
                         <Button className={classes.btn} variant="outlined">
-                            VER TODAS
+                            VER TODOS
                             <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
                         </Button>
                     </Box>
-                    <Box display='flex'>
-                        <Box className={classes.charts}>
-                            <ChartMostUsed />
-                        </Box>
-                        <Box className={classes.charts}>
-                            <ChartMostUsed />
-                        </Box>
-                    </Box>
-                </Grid>
-                <Grid item xs={5}>
-                        <Box display="flex" align="left" marginRight={2.5}>
-                            <Typography variant="h5" className={classes.subtitle}>
-                                Principais dispositivos
-                            </Typography>
-                            <Box flexGrow={1}/>
-                            <Button className={classes.btn} variant="outlined">
-                                VER TODOS
-                                <ArrowForwardIosIcon className={classes.arrowForwardIcon} />
-                            </Button>
-                        </Box>
-                        <Box className={classes.nodes}>
-                            {this.state.data.map((node, idx) => {
-                                if (idx < 2) {
-                                    return (
-                                        <div className={classes.node} key={idx}>
-                                            <Node node={node} id={node.id} name={node.name} type={node.type} is_active={node.state} updatedAt={node.updated_at} nodeConnected={node.node_connected}/>
-                                        </div>
-                                    )
-                                }
-                            })}
-                        </Box>
-                </Grid>
-                <Grid item xs={11}>
-                    <Box align="left">
-                        <Typography variant="h5" className={classes.subtitle}>
-                            Automações
-                        </Typography>
-                    </Box>
-                    <Box display='flex'>
-                        <Box className={classes.charts}>
-                            <Paper style={{padding: '10px'}}>
-                                <Typography style={{color: '#A1A1A1', fontStyle: 'italic'}}>
-                                    EM BREVE...
-                                </Typography>
-                            </Paper>
-                        </Box>
+                    <Box className={classes.nodes}>
+                        {this.state.data.map((node, idx) => {
+                            if (idx < 2) {
+                                return (
+                                    <div className={classes.node} key={idx}>
+                                        <Node node={node} id={node.id} name={node.name} type={node.type} is_active={node.state} updatedAt={node.updated_at} nodeConnected={node.node_connected}/>
+                                    </div>
+                                )
+                            }
+                        })}
                     </Box>
                 </Grid>
             </Grid>
@@ -122,7 +131,7 @@ const styles = {
     },
     btn: {
         color: '#f4f4f4',
-        //borderRadius: '25px',
+        borderRadius: '20px',
         fontSize: '10px',
         backgroundColor: 'cadetblue',
         border: 'none',

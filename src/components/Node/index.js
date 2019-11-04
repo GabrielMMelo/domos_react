@@ -225,7 +225,7 @@ const styles = {
     marginRight: '10px',
   },
   settingsIcon: {
-      color: 'rgba(0, 0, 0, 0.64)',
+      color: 'rgba(0, 0, 0, 0.44)',
   },
   bullet: {
     display: 'inline-block',
