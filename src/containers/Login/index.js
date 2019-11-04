@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import { Redirect } from 'react-router-dom';
 
-import { Box, Button, Paper, Card, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Checkbox, Card, Paper, TextField, Typography } from '@material-ui/core';
+import PasswordField from 'material-ui-password-field'
 import { withStyles } from '@material-ui/core/styles'
 
 import { login, isAuthenticated, getUserInfo } from '../../auth/authenticator';
@@ -15,6 +16,7 @@ class Login extends Component {
             email: "",
             password: "",
             wrongCredentials: false,
+            rememberMe: false,
         }
     }
 
@@ -33,7 +35,7 @@ class Login extends Component {
 
     render() {
 
-        const { wrongCredentials } = this.state;
+        const { wrongCredentials, rememberMe } = this.state;
         const { classes } = this.props;
 
         if (isAuthenticated())
@@ -50,18 +52,33 @@ class Login extends Component {
                             <Box marginTop={3}>
                                 <CustomTextField
                                     className={ classes.textField }
-                                    variant="outlined"
                                     type="email"
                                     onChange={(e) => this.setState({ email: e.target.value }) }
                                     placeholder="E-mail"
                                 />
-                                <CustomTextField
+                                <CustomPasswordField
                                     className={ classes.textField }
-                                    type="password"
+                                    hintText="At least 8 characters"
+                                    floatingLabelText="Enter your password"
+                                    errorText="Your password is too short"
                                     variant="outlined"
-                                    onChange={(e) => this.setState({ password: e.target.value }) }
                                     placeholder="Senha"
+                                    onChange={(e) => this.setState({ password: e.target.value }) }
                                 />
+                                <Box display='flex' className={classes.rememberMeBox} alignItems='center'>
+                                    <CustomCheckbox
+                                        className={classes.rememberMe}
+                                        checked={rememberMe}
+                                        onChange={() => this.setState({ rememberMe: !rememberMe })}
+                                        value="rememberMe"
+                                        inputProps={{
+                                            'aria-label': 'primary checkbox',
+                                        }}
+                                    />
+                                    <Typography className={classes.rememberMeText}>
+                                        Me mantenha logado
+                                    </Typography>
+                                </Box>
                                 { 
                                 wrongCredentials
                                 ?
@@ -94,13 +111,37 @@ const CustomButton = withStyles({
     },
 })(Button);
 
+const CustomPasswordField = withStyles({
+    root: {
+        '&:hover':{
+        },
+        '&:after': {
+            borderBottom: '2px solid cadetblue', 
+        }
+    },
+})(PasswordField);
+
+const CustomCheckbox = withStyles({
+    root: {
+        '&:hover': {
+            backgroundColor: '#5f9ea00f',
+        },
+        '&.MuiCheckbox-colorSecondary.Mui-checked': {
+            color: 'cadetblue',
+            '&:hover': {
+                backgroundColor: '#5f9ea00f'
+            }
+        },
+    }
+})(Checkbox);
+
 const CustomTextField = withStyles({
   root: {
     '& label.Mui-focused': {
       color: 'green',
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
+      borderBottomColor: 'cadetblue',
     },
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
@@ -138,13 +179,22 @@ const styles = {
     },
     textField: {
         width: '80%',
-        marginBottom: '10px',
+        marginBottom: '20px',
     },
     button: {
         width: '80%',
     },
     fullLogo: {
         height: '150px',
+    },
+    rememberMeBox: {
+        width: '80%',
+        marginLeft: '8%',
+        marginTop: '-5%',
+    },
+    rememberMeText: {
+        fontSize: '12px',
+        color: '#315151',
     },
     wrongCredentials: {
         width: '100%',
