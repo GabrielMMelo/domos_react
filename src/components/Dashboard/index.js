@@ -10,7 +10,8 @@ import { withStyles } from '@material-ui/core/styles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 import Node from 'components/Node/index.js';
-import ChartMostUsed from 'components/ChartMostUsed';
+import ChartBiggestUptime from 'components/ChartBiggestUptime';
+import ChartMostSwitched from 'components/ChartMostSwitched';
 import api from '../../services/api';
 import { getToken } from '../../auth/authenticator';
 
@@ -57,10 +58,10 @@ class Dashboard extends Component {
                             </Box>
                             <Box display='flex'>
                                 <Box className={classes.charts}>
-                                    <ChartMostUsed />
+                                    <ChartBiggestUptime />
                                 </Box>
                                 <Box className={classes.charts}>
-                                    <ChartMostUsed />
+                                    <ChartMostSwitched />
                                 </Box>
                             </Box>
                         </Grid>

@@ -7,12 +7,11 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Typography } from '@material-ui/core';
-import { generateKeyPair } from 'crypto';
 
 import api from '../../services/api';
 import { getToken } from '../../auth/authenticator';
 
-class ChartMostUsed extends Component { 
+class ChartBiggestUptime extends Component { 
     constructor(props) {
         super(props);
 
@@ -22,6 +21,19 @@ class ChartMostUsed extends Component {
                     pie: {
                         donut: {
                             size: '40%',
+                        }
+                    },
+                },
+                legend: {
+                    position: 'right',
+                    horizontalAlign: 'left', 
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            if (value) {
+                                return value.toFixed(2).toString().replace('.', 'h') + "m";
+                            }
                         }
                     },
                 },
@@ -41,13 +53,17 @@ class ChartMostUsed extends Component {
         }
     }
 
-    refreshList = () => {
-        console.log({ token: this.state.token});
+    componentDidMount() {
         api
-            .get("device/", { headers: { Authorization: `Token ${getToken()}` } })
+            .get("activity/biggest_uptime_last_month/", { headers: { Authorization: `Token ${getToken()}` } })
             .then(res => {
+                let labels = res.data.activities.labels;
+                let series = res.data.activities.series;
+
+                console.log("DATA", labels, series)
                 this.setState({ 
-                    data: res.data
+                    options: { ...this.state.options, labels },
+                    series: series,
                 });
             })
             .catch(err => console.log(err));
@@ -61,7 +77,7 @@ class ChartMostUsed extends Component {
             <Paper className={classes.paper}>
                 <Box align="left">
                     <Typography className={classes.subtitle}>
-                        Dispositivos mais usados
+                        Maiores uptimes totais (últimos 30 dias)
                     </Typography>
                 </Box>
                 <Chart options={this.state.options} series={this.state.series} type="donut" width={'100%'} height={200} />
@@ -84,4 +100,4 @@ const styles = {
     }
 };
 
-export default withStyles(styles)(ChartMostUsed);
+export default withStyles(styles)(ChartBiggestUptime);
