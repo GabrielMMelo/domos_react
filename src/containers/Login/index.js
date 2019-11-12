@@ -1,104 +1,130 @@
 import React, {Component} from "react";
 import { Redirect } from 'react-router-dom';
 
-import { Box, Button, Checkbox, Card, Paper, TextField, Typography } from '@material-ui/core';
-import PasswordField from 'material-ui-password-field'
-import { withStyles } from '@material-ui/core/styles'
+import { Box, Button, Checkbox, Grid, IconButton, Paper, Snackbar, TextField, Typography } from '@material-ui/core';
+import PasswordField from 'material-ui-password-field';
+import CloseIcon from '@material-ui/icons/Close';
+import { withStyles } from '@material-ui/core/styles';
 
-import { login, isAuthenticated, getUserInfo } from '../../auth/authenticator';
-import fullLogo from '../../assets/img/fullLogo.png';
+import { isAuthenticated } from '../../auth/authenticator';
+import LoginForm from "../../components/forms/LoginForm";
+import RegisterForm from "../../components/forms/RegisterForm";
 
 class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: "",
-            password: "",
-            wrongCredentials: false,
-            rememberMe: false,
+            isFormLoginSelected: true,
+            isSnackbarActivated: false,
+            snackbarMessage: '',
         }
     }
 
-    onLogin = async (e) => {
-        e.preventDefault();
-        const { email, password } = this.state;
-        try {
-            await login(email, password);
-            await getUserInfo();
-        }
-        catch(e) {
-            this.setState({ wrongCredentials: true})
-        }
-        this.forceUpdate();
+    formSelectorStyle = (e) => {
+        const { isFormLoginSelected } = this.state;
+
+        if (e === 'login') 
+            return { 
+                backgroundColor: isFormLoginSelected ? '#fff' : '#eae8e8',
+                color: isFormLoginSelected ? '#111' : '#989898',
+                boxShadow: isFormLoginSelected ? '-2px -1px 1px -2px rgba(0,0,0,0.2), 0px -1px 1px -2px rgba(0,0,0,0.14), 0px -2px 3px -2px rgba(0,0,0,0.12)' : 'none',
+            };
+        else  // register
+            return { 
+                backgroundColor: isFormLoginSelected ? '#eae8e8' : '#fff',
+                color: isFormLoginSelected ? '#989898' : '#111',
+                boxShadow: isFormLoginSelected ? 'none' : '-2px -1px 1px -2px rgba(0,0,0,0.2), 0px -1px 1px -2px rgba(0,0,0,0.14), 0px -2px 3px -2px rgba(0,0,0,0.12)',
+            };
+    }
+
+    fireSnackbar = (msg) => {
+        this.setState({ isSnackbarActivated: true, snackbarMessage: msg })
+    }
+
+    closeSnackbar = () => {
+        this.setState({ isSnackbarActivated: false })
     }
 
     render() {
 
-        const { wrongCredentials, rememberMe } = this.state;
+        const { isFormLoginSelected, isSnackbarActivated, snackbarMessage} = this.state;
         const { classes } = this.props;
 
         if (isAuthenticated())
             return <Redirect to='/' push={true}/>;
         else
             return (
+            <>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={isSnackbarActivated}
+                    autoHideDuration={6000}
+                    onClose={this.closeSnackbar}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{snackbarMessage}</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={this.closeSnackbar}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
                 <Box alignContent="center" justifyContent='center' className={ classes.background }>
                     <Box justifyContent='center' className={ classes.container }>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <Box display="flex" style={this.formSelectorStyle('login')} className={classes.formSelector} justifyContent="center" alignItems="center">
+                                    <CustomFormSelectorButton disableRipple onClick={() => this.setState({ isFormLoginSelected: true })} className={classes.formSelectorButton}>
+                                        Já sou cadastrado
+                                    </CustomFormSelectorButton>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Box display="flex" style={this.formSelectorStyle('register')} className={classes.formSelector} justifyContent="center" alignItems="center">
+                                    <CustomFormSelectorButton disableRipple onClick={() => this.setState({ isFormLoginSelected: false })} className={classes.formSelectorButton}>
+                                        Não sou cadastrado
+                                    </CustomFormSelectorButton>
+                                </Box>
+                            </Grid>
+                        </Grid>
                         <Paper className={ classes.paper }>
-                            <form onSubmit={this.onLogin}>
-                            <Box>
-                                <img className={classes.fullLogo} src={fullLogo} alt="Domos' full logo" />
-                            </Box>
-                            <Box marginTop={3}>
-                                <CustomTextField
-                                    className={ classes.textField }
-                                    type="email"
-                                    onChange={(e) => this.setState({ email: e.target.value }) }
-                                    placeholder="E-mail"
-                                />
-                                <CustomPasswordField
-                                    className={ classes.textField }
-                                    hintText="At least 8 characters"
-                                    floatingLabelText="Enter your password"
-                                    errorText="Your password is too short"
-                                    variant="outlined"
-                                    placeholder="Senha"
-                                    onChange={(e) => this.setState({ password: e.target.value }) }
-                                />
-                                <Box display='flex' className={classes.rememberMeBox} alignItems='center'>
-                                    <CustomCheckbox
-                                        className={classes.rememberMe}
-                                        checked={rememberMe}
-                                        onChange={() => this.setState({ rememberMe: !rememberMe })}
-                                        value="rememberMe"
-                                        inputProps={{
-                                            'aria-label': 'primary checkbox',
-                                        }}
-                                    />
-                                    <Typography className={classes.rememberMeText}>
-                                        Me mantenha logado
-                                    </Typography>
-                                </Box>
-                                { 
-                                wrongCredentials
-                                ?
-                                <Box className={classes.wrongCredentials} justifyContent='center'>
-                                    <Typography className={classes.wrongCredentialsText}>E-mail e/ou senha incorreto(s)</Typography>
-                                </Box>
-                                :
-                                <></>
-                                }
-                            </Box>
-                            <Box marginTop={2}>
-                                <CustomButton variant="contained" className={classes.button} type="submit">Login</CustomButton>
-                            </Box>
-                            </form>
+                            {
+                            isFormLoginSelected
+                            ?
+                            <LoginForm />
+                            :
+
+                            <RegisterForm fireSnackbar={this.fireSnackbar}/>
+
+                            }
                         </Paper>
                     </Box>
                 </Box>
+            </>
             );
     }
 }
+const CustomFormSelectorButton = withStyles({
+    root: {
+        '&:focus': {
+            outline: '0'
+        },
+        '&:hover': {
+            backgroundColor: 'inherit',
+        },
+    },
+})(Button);
 
 const CustomButton = withStyles({
     root: {
@@ -173,9 +199,29 @@ const styles = {
         left: '35%',
         width: '28%',
     },
+    formSelector: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
+        color: 'rgba(0,0,0,0.4)',
+        borderTopLeftRadius: '30px',
+        borderTopRightRadius: '30px',
+        height: '40px',
+    },
+    formSelectorButton: {
+        '&:hover': {
+            backgroundcolor: '#fff',
+        },
+        width: '100%',
+        height: '100%',
+        borderTopLeftRadius: '30px',
+        borderTopRightRadius: '30px',
+        fontFamily: 'inherit',
+        fontSize: '12px',
+    },
     paper: {
         padding: '20px',
-        borderRadius: '30px'
+        borderRadius: '0px',
+        borderBottomLeftRadius: '30px',
+        borderBottomRightRadius: '30px',
     },
     textField: {
         width: '80%',
