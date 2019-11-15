@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 
+import { Redirect } from 'react-router-dom';
 import { Box, Button, Checkbox, TextField, Typography } from '@material-ui/core';
 import PasswordField from 'material-ui-password-field';
 import { withStyles } from '@material-ui/core/styles';
 
-import { login, getUserInfo } from '../../../auth/authenticator';
+import { isAuthenticated, login, getUserInfo } from '../../../auth/authenticator';
 import fullLogo from '../../../assets/img/fullLogo.png';
 
 class LoginForm extends Component {
@@ -37,53 +38,56 @@ class LoginForm extends Component {
         const { wrongCredentials, rememberMe } = this.state;
         const { classes } = this.props;
 
-        return (
-            <form onSubmit={this.onLogin}>
-                <Box>
-                    <img className={classes.fullLogo} src={fullLogo} alt="Domos' full logo" />
-                </Box>
-                <Box marginTop={3}>
-                    <CustomTextField
-                        className={ classes.textField }
-                        type="email"
-                        onChange={(e) => this.setState({ email: e.target.value }) }
-                        placeholder="E-mail"
-                    />
-                    <CustomPasswordField
-                        className={ classes.textField }
-                        variant="outlined"
-                        placeholder="Senha"
-                        onChange={(e) => this.setState({ password: e.target.value }) }
-                    />
-                    <Box display='flex' className={classes.rememberMeBox} alignItems='center'>
-                        <CustomCheckbox
-                            className={classes.rememberMe}
-                            checked={rememberMe}
-                            onChange={() => this.setState({ rememberMe: !rememberMe })}
-                            value="rememberMe"
-                            inputProps={{
-                                'aria-label': 'primary checkbox',
-                            }}
+        if (isAuthenticated())
+            return <Redirect to='/' push={true}/>;
+        else
+            return (
+                <form onSubmit={this.onLogin}>
+                    <Box>
+                        <img className={classes.fullLogo} src={fullLogo} alt="Domos' full logo" />
+                    </Box>
+                    <Box marginTop={3}>
+                        <CustomTextField
+                            className={ classes.textField }
+                            type="email"
+                            onChange={(e) => this.setState({ email: e.target.value }) }
+                            placeholder="E-mail"
                         />
-                        <Typography className={classes.rememberMeText}>
-                            Me mantenha logado
-                        </Typography>
+                        <CustomPasswordField
+                            className={ classes.textField }
+                            variant="outlined"
+                            placeholder="Senha"
+                            onChange={(e) => this.setState({ password: e.target.value }) }
+                        />
+                        <Box display='flex' className={classes.rememberMeBox} alignItems='center'>
+                            <CustomCheckbox
+                                className={classes.rememberMe}
+                                checked={rememberMe}
+                                onChange={() => this.setState({ rememberMe: !rememberMe })}
+                                value="rememberMe"
+                                inputProps={{
+                                    'aria-label': 'primary checkbox',
+                                }}
+                            />
+                            <Typography className={classes.rememberMeText}>
+                                Me mantenha logado
+                            </Typography>
+                        </Box>
+                        { 
+                        wrongCredentials
+                        ?
+                        <Box className={classes.wrongCredentials} justifyContent='center'>
+                            <Typography className={classes.wrongCredentialsText}>E-mail e/ou senha incorreto(s)</Typography>
+                        </Box>
+                        :
+                        <></>
+                        }
                     </Box>
-                    { 
-                    wrongCredentials
-                    ?
-                    <Box className={classes.wrongCredentials} justifyContent='center'>
-                        <Typography className={classes.wrongCredentialsText}>E-mail e/ou senha incorreto(s)</Typography>
+                    <Box marginTop={3} marginBottom={2}>
+                        <CustomButton variant="contained" className={classes.button} type="submit">Login</CustomButton>
                     </Box>
-                    :
-                    <></>
-                    }
-                </Box>
-                <Box marginTop={3} marginBottom={2}>
-                    <CustomButton variant="contained" className={classes.button} type="submit">Login</CustomButton>
-                </Box>
-            </form>
-        );
+                </form>
+            );
     }
 }
 
