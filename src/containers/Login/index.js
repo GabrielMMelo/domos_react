@@ -1,12 +1,10 @@
 import React, {Component} from "react";
-import { Redirect } from 'react-router-dom';
 
 import { Box, Button, Checkbox, Grid, IconButton, Paper, Snackbar, TextField, Typography } from '@material-ui/core';
 import PasswordField from 'material-ui-password-field';
 import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
 
-import { isAuthenticated } from '../../auth/authenticator';
 import LoginForm from "../../components/forms/LoginForm";
 import RegisterForm from "../../components/forms/RegisterForm";
 
@@ -51,9 +49,6 @@ class Login extends Component {
         const { isFormLoginSelected, isSnackbarActivated, snackbarMessage} = this.state;
         const { classes } = this.props;
 
-        if (isAuthenticated())
-            return <Redirect to='/' push={true}/>;
-        else
             return (
             <>
                 <Snackbar
